@@ -1,26 +1,26 @@
 {
   "name": "calibrator-workers",
   "version": "0.0.1",
+  "description": "All Cloudflare workers used to run Calibrator app",
+  "author": {
+    "name": "Alvaro Gaona",
+    "email": "alvgaona@gmail.com"
+  },
+  "repository": {
+    "url": "https://github.com/alvgaona/calibrator-workers"
+  },
   "private": true,
+  "engines": {
+    "bun": "^1.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
-    "test": "vitest",
-    "cf-typegen": "wrangler types",
-    "format:check": "prettier --check --ignore-path .gitignore .",
-    "format": "prettier --write --ignore-path .gitignore ."
+    "format:check": "prettier --check .",
+    "format": "prettier --write ."
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.4.5",
-    "@cloudflare/workers-types": "^4.20240821.1",
-    "prettier-plugin-organize-imports": "^4.0.0",
-    "typescript": "^5.5.2",
-    "vitest": "1.5.0",
-    "wrangler": "^3.60.3"
-  },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.637.0",
-    "@aws-sdk/s3-request-presigner": "^3.637.0"
+    "prettier-plugin-organize-imports": "^4.0.0"
   }
 }
