@@ -97,8 +97,8 @@ binding = "CALIBRATOR_INPUT_BUCKET"
 bucket_name = "calibrator-input"
 
 [[r2_buckets]]
-binding = "CALIBRATOR_OUTPUT_BUCKET"
-bucket_name = "calibrator-output"
+binding = "CALIBRATOR_UPLOAD_BUCKET"
+bucket_name = "calibrator-upload"
 
 # Bind another Worker service. Use this binding to call another Worker without network overhead.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings

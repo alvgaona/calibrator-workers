@@ -1,6 +1,6 @@
 interface Env {
   CALIBRATOR_INPUT_BUCKET: R2Bucket;
-  CALIBRATOR_OUTPUT_BUCKET: R2Bucket;
+  CALIBRATOR_UPLOAD_BUCKET: R2Bucket;
 }
 
 export default {
