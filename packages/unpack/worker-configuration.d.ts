@@ -2,6 +2,6 @@
 // by running `wrangler types`
 
 interface Env {
-	CALIBRATOR_INPUT_BUCKET: R2Bucket;
-	CALIBRATOR_UPLOAD_BUCKET: R2Bucket;
+  CALIBRATOR_INPUT_BUCKET: R2Bucket;
+  CALIBRATOR_UPLOAD_BUCKET: R2Bucket;
 }
