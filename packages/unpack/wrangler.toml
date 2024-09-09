@@ -1,5 +1,5 @@
 #:schema node_modules/wrangler/config-schema.json
-name = "calibraator-unpack"
+name = "calibrator-unpack"
 main = "src/index.ts"
 compatibility_date = "2024-09-03"
 compatibility_flags = ["nodejs_compat"]
@@ -86,14 +86,19 @@ compatibility_flags = ["nodejs_compat"]
 
 # Bind a Queue consumer. Queue Consumers can retrieve tasks scheduled by Producers to act on them.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#queues
-# [[queues.consumers]]
-# queue = "my-queue"
+[[queues.consumers]]
+queue = "calibrator-unpack"
+dead_letter_queue = "calibrator-unpack-dlq"
 
 # Bind an R2 Bucket. Use R2 to store arbitrarily large blobs of data, such as files.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#r2-buckets
 [[r2_buckets]]
-binding = "CALIBRATOR_BUCKET"
-bucket_name = "calibrator"
+binding = "CALIBRATOR_INPUT_BUCKET"
+bucket_name = "calibrator-input"
+
+[[r2_buckets]]
+binding = "CALIBRATOR_OUTPUT_BUCKET"
+bucket_name = "calibrator-output"
 
 # Bind another Worker service. Use this binding to call another Worker without network overhead.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
