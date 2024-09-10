@@ -22,7 +22,7 @@ export default {
     ctx: ExecutionContext,
   ): Promise<void> {
     for (const message of batch.messages) {
-      const event: R2Event = JSON.parse(message.body as string);
+      const event: R2Event = message.body as R2Event;
 
       if (
         event.action === 'PutObject' &&
