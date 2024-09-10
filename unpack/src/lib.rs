@@ -39,6 +39,11 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
         let dst_bucket = env.bucket("CALIBRATOR_INPUT_BUCKET")?;
         let object = src_bucket.get(&event.object.key).execute().await?;
 
+        console_log!("{}", event.object.key);
+        // TODO: process the key to extract the user id and run id
+        // given that there's a convention in the upload bucket to
+        // to store compressed and archived input files
+
         if let Some(object) = object {
             if let Some(object_contents) = object.body() {
                 let buffer = object_contents.bytes().await?;
@@ -50,17 +55,27 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
 
                 // Unpack the tar archive
                 let mut archive = Archive::new(&decompressed[..]);
+
                 for entry in archive.entries()? {
                     let mut entry = entry?;
                     let path = entry.path()?.into_owned();
-                    let file_name = path.file_name().unwrap().to_str().unwrap();
+                    let entry_type = entry.header().entry_type();
+
+                    if entry_type.is_dir() {
+                        continue;
+                    }
+
+                    let full_path = path.to_str().unwrap().replace("\\", "/");
 
                     let mut file_contents = Vec::new();
                     entry.read_to_end(&mut file_contents)?;
 
-                    dst_bucket.put(file_name, file_contents).execute().await?;
+                    dst_bucket
+                        .put(path.to_str().unwrap(), file_contents)
+                        .execute()
+                        .await?;
 
-                    console_log!("Unpacked file: {:?}", file_name);
+                    console_log!("Uploaded file: {}", full_path);
                 }
             } else {
                 console_error!("Object body not found");
