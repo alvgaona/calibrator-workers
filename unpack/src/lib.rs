@@ -1,27 +1,27 @@
-use serde::{Deserialize, Serialize};
-use worker::*;
 use flate2::read::GzDecoder;
-use tar::Archive;
+use serde::{Deserialize, Serialize};
 use std::io::Read;
+use tar::Archive;
+use worker::*;
 
 #[derive(Serialize, Debug, Clone, Deserialize)]
 pub struct R2Event {
-  account: String,
-  action: String,
-  bucket: String,
-  object: CustomR2Object,
-  #[serde(rename = "eventTime")]
-  event_time: String,
-  #[serde(rename = "copySource")]
-  copy_source: Option<CopySource>,
+    account: String,
+    action: String,
+    bucket: String,
+    object: CustomR2Object,
+    #[serde(rename = "eventTime")]
+    event_time: String,
+    #[serde(rename = "copySource")]
+    copy_source: Option<CopySource>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CustomR2Object {
-  key: String,
-  size: u32,
-  #[serde(rename = "eTag")]
-  etag: String,
+    key: String,
+    size: u32,
+    #[serde(rename = "eTag")]
+    etag: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -32,41 +32,60 @@ pub struct CopySource {
 
 #[event(queue)]
 async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context) -> Result<()> {
-  for message in message_batch.messages()? {
-    let event = message.body();
-    console_log!("{:?}", event);
+    for message in message_batch.messages()? {
+        let event = message.body();
 
-    let src_bucket = env.bucket("CALIBRATOR_UPLOAD_BUCKET")?;
-    let object = src_bucket.get(&event.object.key).execute().await?;
+        let src_bucket = env.bucket("CALIBRATOR_UPLOAD_BUCKET")?;
+        let dst_bucket = env.bucket("CALIBRATOR_INPUT_BUCKET")?;
+        let object = src_bucket.get(&event.object.key).execute().await?;
 
-    // Unwrap the Option<Object> first
-    if let Some(object) = object {
-        // Now we can call body() on the actual Object
-        if let Some(object_contents) = object.body() {
-            // Rest of your code remains the same
-            let buffer = object_contents.bytes().await?;
+        console_log!("{}", event.object.key);
+        // TODO: process the key to extract the user id and run id
+        // given that there's a convention in the upload bucket to
+        // to store compressed and archived input files
 
-            // Decompress the gzip content
-            let mut gz = GzDecoder::new(&buffer[..]);
-            let mut decompressed = Vec::new();
-            gz.read_to_end(&mut decompressed)?;
+        if let Some(object) = object {
+            if let Some(object_contents) = object.body() {
+                let buffer = object_contents.bytes().await?;
 
-            // Unpack the tar archive
-            let mut archive = Archive::new(&decompressed[..]);
-            for entry in archive.entries()? {
-                let entry = entry?;
-                let path = entry.path()?;
-                console_log!("Unpacked file: {:?}", path);
+                // Decompress the gzip content
+                let mut gz = GzDecoder::new(&buffer[..]);
+                let mut decompressed = Vec::new();
+                gz.read_to_end(&mut decompressed)?;
+
+                // Unpack the tar archive
+                let mut archive = Archive::new(&decompressed[..]);
+
+                for entry in archive.entries()? {
+                    let mut entry = entry?;
+                    let path = entry.path()?.into_owned();
+                    let entry_type = entry.header().entry_type();
+
+                    if entry_type.is_dir() {
+                        continue;
+                    }
+
+                    let full_path = path.to_str().unwrap().replace("\\", "/");
+
+                    let mut file_contents = Vec::new();
+                    entry.read_to_end(&mut file_contents)?;
+
+                    dst_bucket
+                        .put(path.to_str().unwrap(), file_contents)
+                        .execute()
+                        .await?;
+
+                    console_log!("Uploaded file: {}", full_path);
+                }
+            } else {
+                console_error!("Object body not found");
             }
         } else {
-            console_log!("Object body not found");
+            console_error!("Object not found");
         }
-    } else {
-        console_log!("Object not found");
+
+        message.ack();
     }
 
-    message.ack();
-  }
-
-  Ok(())
+    Ok(())
 }
