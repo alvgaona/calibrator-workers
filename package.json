@@ -14,7 +14,7 @@
     "bun": "^1.0.0"
   },
   "workspaces": [
-    "packages/*"
+    "upload"
   ],
   "scripts": {
     "format:check": "prettier --check .",
