@@ -1,5 +1,5 @@
 [package]
-name = "hello-world"
+name = "unpack"
 version = "0.0.1"
 edition = "2021"
 authors = [ "Alvaro Gaona <alvgaona@gmail.com>" ]
@@ -19,3 +19,5 @@ worker = { version="0.3.4", features = ["queue"] }
 worker-macros = { version="0.3.4" }
 console_error_panic_hook = { version = "0.1.1" }
 serde = { version = "1.0.210", features = ["derive"] }
+tar = "0.4.41"
+flate2 = "1.0.33"
