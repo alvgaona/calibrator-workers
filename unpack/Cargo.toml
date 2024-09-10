@@ -4,6 +4,8 @@ version = "0.0.1"
 edition = "2021"
 authors = [ "Alvaro Gaona <alvgaona@gmail.com>" ]
 repository = "https://github.com/alvgaona/calibrator-workers"
+license = "AGPL-3.0, GPL-3.0"
+description = "A worker for unpacking uploaded images"
 
 [package.metadata.release]
 release = false
