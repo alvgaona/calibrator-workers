@@ -9,11 +9,10 @@ interface Env {
   ACCOUNT_ID: string;
   ACCESS_KEY_ID: string;
   SECRET_ACCESS_KEY: string;
+  UPLOAD_BUCKET: string;
 }
 
 const app = new Hono();
-
-const BUCKET_NAME = 'calibrator';
 
 let s3: S3Client;
 
@@ -73,11 +72,15 @@ app.post('/', async (c: Context) => {
       return c.json({ error: 'Missing required fields' }, 400);
     }
 
+    const key = `${body.runId}/${body.dataset}/${body.fileName}`;
+
+    console.log(key);
+
     const presignedUrl = await getSignedUrl(
       s3,
       new PutObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: `${body.runId}/${body.dataset}/${body.fileName}`,
+        Bucket: c.env.UPLOAD_BUCKET,
+        Key: key,
       }),
       { expiresIn: 360 },
     );
