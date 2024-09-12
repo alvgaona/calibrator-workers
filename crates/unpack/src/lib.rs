@@ -39,10 +39,15 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
         let dst_bucket = env.bucket("CALIBRATOR_INPUT_BUCKET")?;
         let object = src_bucket.get(&event.object.key).execute().await?;
 
-        console_log!("{}", event.object.key);
-        // TODO: process the key to extract the user id and run id
-        // given that there's a convention in the upload bucket to
-        // to store compressed and archived input files
+        let key_parts: Vec<&str> = event.object.key.split("/").collect();
+
+        if key_parts.len() < 3 {
+            console_error!(
+                "Key does not adhere to the convention: {}",
+                event.object.key
+            );
+            continue;
+        }
 
         if let Some(object) = object {
             if let Some(object_contents) = object.body() {
@@ -70,10 +75,12 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
                     let mut file_contents = Vec::new();
                     entry.read_to_end(&mut file_contents)?;
 
-                    dst_bucket
-                        .put(path.to_str().unwrap(), file_contents)
-                        .execute()
-                        .await?;
+                    let user_id = key_parts[0];
+                    let dataset = key_parts[1];
+
+                    let dst_path = format!("{}/{}/{}", user_id, dataset, path.to_str().unwrap(),);
+
+                    dst_bucket.put(dst_path, file_contents).execute().await?;
 
                     console_log!("Uploaded file: {}", full_path);
                 }
