@@ -72,15 +72,11 @@ app.post('/', async (c: Context) => {
       return c.json({ error: 'Missing required fields' }, 400);
     }
 
-    const key = `${body.runId}/${body.dataset}/${body.fileName}`;
-
-    console.log(key);
-
     const presignedUrl = await getSignedUrl(
       s3,
       new PutObjectCommand({
         Bucket: c.env.UPLOAD_BUCKET,
-        Key: key,
+        Key: `${body.runId}/${body.dataset}/${body.fileName}`,
       }),
       { expiresIn: 360 },
     );
