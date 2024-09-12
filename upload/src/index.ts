@@ -9,11 +9,10 @@ interface Env {
   ACCOUNT_ID: string;
   ACCESS_KEY_ID: string;
   SECRET_ACCESS_KEY: string;
+  UPLOAD_BUCKET: string;
 }
 
 const app = new Hono();
-
-const BUCKET_NAME = 'calibrator';
 
 let s3: S3Client;
 
@@ -76,7 +75,7 @@ app.post('/', async (c: Context) => {
     const presignedUrl = await getSignedUrl(
       s3,
       new PutObjectCommand({
-        Bucket: BUCKET_NAME,
+        Bucket: c.env.UPLOAD_BUCKET,
         Key: `${body.runId}/${body.dataset}/${body.fileName}`,
       }),
       { expiresIn: 360 },
