@@ -39,7 +39,13 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
         let dst_bucket = env.bucket("CALIBRATOR_INPUT_BUCKET")?;
         let object = src_bucket.get(&event.object.key).execute().await?;
 
-        console_log!("{}", event.object.key);
+        let key_parts: Vec<&str> = event.object.key.split("/").collect();
+
+        if key_parts.len() < 3 {
+            console_error!("Invalid key format: {}", event.object.key);
+            continue;
+        }
+
         // TODO: process the key to extract the user id and run id
         // given that there's a convention in the upload bucket to
         // to store compressed and archived input files
@@ -70,10 +76,19 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
                     let mut file_contents = Vec::new();
                     entry.read_to_end(&mut file_contents)?;
 
-                    dst_bucket
-                        .put(path.to_str().unwrap(), file_contents)
-                        .execute()
-                        .await?;
+                    let user_id = key_parts[0];
+                    let run_id = key_parts[1];
+                    let dataset = key_parts[2];
+
+                    let dst_path = format!(
+                        "{}/{}/{}/{}",
+                        user_id,
+                        run_id,
+                        dataset,
+                        path.to_str().unwrap(),
+                    );
+
+                    dst_bucket.put(dst_path, file_contents).execute().await?;
 
                     console_log!("Uploaded file: {}", full_path);
                 }
