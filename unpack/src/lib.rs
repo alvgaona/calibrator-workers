@@ -42,7 +42,10 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
         let key_parts: Vec<&str> = event.object.key.split("/").collect();
 
         if key_parts.len() < 3 {
-            console_error!("Key does not adhere to the convention: {}", event.object.key);
+            console_error!(
+                "Key does not adhere to the convention: {}",
+                event.object.key
+            );
             continue;
         }
 
@@ -73,16 +76,9 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
                     entry.read_to_end(&mut file_contents)?;
 
                     let user_id = key_parts[0];
-                    let run_id = key_parts[1];
-                    let dataset = key_parts[2];
+                    let dataset = key_parts[1];
 
-                    let dst_path = format!(
-                        "{}/{}/{}/{}",
-                        user_id,
-                        run_id,
-                        dataset,
-                        path.to_str().unwrap(),
-                    );
+                    let dst_path = format!("{}/{}/{}", user_id, dataset, path.to_str().unwrap(),);
 
                     dst_bucket.put(dst_path, file_contents).execute().await?;
 

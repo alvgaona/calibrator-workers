@@ -32,7 +32,7 @@ function createS3Client(
 }
 
 interface RequestBody {
-  runId: string;
+  userId: string;
   dataset: string;
   fileName: string;
 }
@@ -68,7 +68,7 @@ app.post('/', async (c: Context) => {
   try {
     const body: RequestBody = await c.req.json();
 
-    if (!body.runId || !body.dataset || !body.fileName) {
+    if (!body.dataset || !body.fileName || !body.userId) {
       return c.json({ error: 'Missing required fields' }, 400);
     }
 
@@ -76,7 +76,7 @@ app.post('/', async (c: Context) => {
       s3,
       new PutObjectCommand({
         Bucket: c.env.UPLOAD_BUCKET,
-        Key: `${body.runId}/${body.dataset}/${body.fileName}`,
+        Key: `${body.userId}/${body.dataset}/${body.fileName}`,
       }),
       { expiresIn: 360 },
     );
