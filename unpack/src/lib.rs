@@ -42,13 +42,9 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
         let key_parts: Vec<&str> = event.object.key.split("/").collect();
 
         if key_parts.len() < 3 {
-            console_error!("Invalid key format: {}", event.object.key);
+            console_error!("Key does not adhere to the convention: {}", event.object.key);
             continue;
         }
-
-        // TODO: process the key to extract the user id and run id
-        // given that there's a convention in the upload bucket to
-        // to store compressed and archived input files
 
         if let Some(object) = object {
             if let Some(object_contents) = object.body() {
