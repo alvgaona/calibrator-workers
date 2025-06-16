@@ -1,26 +1,27 @@
 {
-  "name": "calibrator-workers",
-  "version": "0.0.1",
-  "description": "All Cloudflare workers used to run Calibrator app",
-  "author": {
-    "name": "Alvaro Gaona",
-    "email": "alvgaona@gmail.com"
-  },
-  "repository": {
-    "url": "https://github.com/alvgaona/calibrator-workers"
-  },
-  "private": true,
-  "engines": {
-    "bun": "^1.0.0"
-  },
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "format:check": "prettier --check .",
-    "format": "prettier --write ."
-  },
-  "devDependencies": {
-    "prettier-plugin-organize-imports": "^4.0.0"
-  }
+    "name": "calibrator-workers",
+    "version": "0.0.1",
+    "description": "All Cloudflare workers used to run Calibrator app",
+    "author": {
+        "name": "Alvaro Gaona",
+        "email": "alvgaona@gmail.com"
+    },
+    "repository": {
+        "url": "https://github.com/alvgaona/calibrator-workers"
+    },
+    "private": true,
+    "engines": {
+        "bun": "^1.0.0"
+    },
+    "workspaces": ["packages/*"],
+    "scripts": {
+        "format:check": "biome check .",
+        "format": "biome format --write .",
+        "lint": "biome lint .",
+        "lint:fix": "biome lint --write .",
+        "check": "biome check --write ."
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.9.4"
+    }
 }
