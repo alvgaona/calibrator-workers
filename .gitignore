@@ -173,3 +173,7 @@ dist
 
 # rust
 target/
+build/
+
+# Cloudflare
+.wrangler
