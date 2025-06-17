@@ -1,5 +1,5 @@
 {
-    "name": "upload",
+    "name": "calibrate",
     "version": "0.0.1",
     "private": true,
     "scripts": {
@@ -17,8 +17,7 @@
         "wrangler": "^4.20.0"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.830.0",
-        "@aws-sdk/s3-request-presigner": "^3.830.0",
+        "@aws-sdk/client-sqs": "^3.830.0",
         "hono": "^4.7.11"
     }
 }

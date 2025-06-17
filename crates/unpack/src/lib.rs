@@ -80,7 +80,10 @@ async fn main(message_batch: MessageBatch<R2Event>, env: Env, _context: Context)
 
                     let dst_path = format!("{}/{}/{}", user_id, dataset, path.to_str().unwrap(),);
 
-                    dst_bucket.put(dst_path, file_contents).execute().await?;
+                    dst_bucket
+                        .put(dst_path.clone(), file_contents)
+                        .execute()
+                        .await?;
 
                     console_log!("Uploaded file: {}", full_path);
                 }
