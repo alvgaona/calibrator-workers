@@ -1,8 +1,11 @@
 {
-	"extends": "../../tsconfig.json",
-	"compilerOptions": {
-		"lib": ["esnext"],
-		"types": ["@cloudflare/workers-types"]
-	}
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "lib": [
+            "esnext"
+        ],
+        "types": [
+            "@cloudflare/workers-types"
+        ]
+    }
 }
-
