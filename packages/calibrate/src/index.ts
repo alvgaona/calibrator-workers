@@ -38,7 +38,11 @@ const errorResponseSchema = z.object({
     }),
 });
 
-const versionResponseSchema = z.object({
+const healthResponseSchema = z.object({
+    name: z.string().openapi({
+        description: 'Worker name',
+        example: 'calibrate'
+    }),
     version: z.string().openapi({
         description: 'API version',
         example: '0.0.1'
@@ -46,36 +50,17 @@ const versionResponseSchema = z.object({
 });
 
 // OpenAPI route definitions
-const rootRoute = createRoute({
+const healthRoute = createRoute({
     method: 'get',
-    path: '/',
+    path: '/api/health',
     summary: 'Health check endpoint',
-    description: 'Returns a simple text response to verify the API is running',
+    description: 'Returns the worker name and version information',
     responses: {
         200: {
-            description: 'API is running',
-            content: {
-                'text/plain': {
-                    schema: z.string().openapi({
-                        example: 'calibrate'
-                    }),
-                },
-            },
-        },
-    },
-});
-
-const versionRoute = createRoute({
-    method: 'get',
-    path: '/version',
-    summary: 'Get API version',
-    description: 'Returns the current version of the calibration API',
-    responses: {
-        200: {
-            description: 'API version information',
+            description: 'Worker health information',
             content: {
                 'application/json': {
-                    schema: versionResponseSchema,
+                    schema: healthResponseSchema,
                 },
             },
         },
@@ -84,7 +69,7 @@ const versionRoute = createRoute({
 
 const calibrateRoute = createRoute({
     method: 'post',
-    path: '/calibrate',
+    path: '/api/calibrate',
     summary: 'Queue calibration job',
     description: 'Submits a calibration job to the processing queue',
     request: {
@@ -153,8 +138,8 @@ app.use(
     }),
 );
 
-// Middleware to initialize SQS client only for /calibrate endpoint
-app.use('/calibrate', (c: Context, next) => {
+// Middleware to initialize SQS client only for /api/calibrate endpoint
+app.use('/api/calibrate', (c: Context, next) => {
     const env = c.env as Env;
     if (!env.AWS_ACCESS_KEY_ID || !env.AWS_SECRET_ACCESS_KEY || !env.AWS_REGION) {
         throw new Error('Missing required AWS environment variables');
@@ -189,12 +174,9 @@ app.doc('/openapi.json', {
 });
 
 // Route handlers
-app.openapi(rootRoute, async (c) => {
-    return c.text('calibrate');
-});
-
-app.openapi(versionRoute, async (c) => {
+app.openapi(healthRoute, async (c) => {
     return c.json({
+        name: 'calibrate',
         version: '0.0.1',
     });
 });

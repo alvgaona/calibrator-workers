@@ -7,5 +7,12 @@
         "types": [
             "@cloudflare/workers-types"
         ]
-    }
+    },
+    "include": [
+        "worker-configuration.d.ts",
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "test"
+    ]
 }
