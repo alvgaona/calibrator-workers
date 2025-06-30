@@ -13,7 +13,9 @@
     "engines": {
         "bun": "^1.0.0"
     },
-    "workspaces": ["packages/*"],
+    "workspaces": [
+        "packages/*"
+    ],
     "scripts": {
         "format:check": "biome check .",
         "format": "biome format --write .",
