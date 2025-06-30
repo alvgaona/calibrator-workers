@@ -20,6 +20,9 @@ compatibility_flags = ["nodejs_compat"]
 ACCOUNT_ID = "590d5e6a4382a813b506fa45ca1609e0"
 UPLOAD_BUCKET = "calibrator-upload"
 
+# Custom domain routes
+routes = [{ pattern = "calibrator-upload.alvgaona.dev", custom_domain = true }]
+
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
 # [ai]

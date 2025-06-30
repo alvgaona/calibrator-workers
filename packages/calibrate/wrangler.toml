@@ -20,3 +20,7 @@ compatibility_flags = ["nodejs_compat"]
 SQS_QUEUE_NAME = "calibrate-queue"
 AWS_REGION = "us-east-1"
 
+# Custom domain routes
+routes = [
+    { pattern = "calibrator-calibrate.alvgaona.dev", custom_domain = true },
+]
