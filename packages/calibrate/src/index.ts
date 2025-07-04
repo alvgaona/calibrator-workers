@@ -1,12 +1,27 @@
 import type { Context } from 'hono';
 import { cors } from 'hono/cors';
-import { SQSClient, GetQueueUrlCommand, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { z } from 'zod';
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
+import type { ContainerOptions } from '@cloudflare/containers';
+import { Container, getRandom } from '@cloudflare/containers';
+import type { DurableObjectState } from '@cloudflare/workers-types';
+
+export class Calibrate extends Container {
+    constructor(ctx: DurableObjectState, env: Env, options?: ContainerOptions) {
+        super(ctx, env);
+        this.defaultPort = 8080;
+        this.sleepAfter = '10s';
+
+        this.envVars = {
+            AWS_REGION: env.AWS_REGION,
+            AWS_ACCESS_KEY_ID: env.AWS_ACCESS_KEY_ID,
+            AWS_SECRET_ACCESS_KEY: env.AWS_SECRET_ACCESS_KEY,
+        };
+    }
+}
 
 interface Env {
-    SQS_QUEUE_NAME: string;
     AWS_REGION: string;
     AWS_ACCESS_KEY_ID: string;
     AWS_SECRET_ACCESS_KEY: string;
@@ -113,18 +128,6 @@ const calibrateRoute = createRoute({
 // Create OpenAPI Hono app
 const app = new OpenAPIHono();
 
-let sqsClient: SQSClient;
-
-function createSQSClient(region: string, accessKeyId: string, secretAccessKey: string) {
-    return new SQSClient({
-        region,
-        credentials: {
-            accessKeyId,
-            secretAccessKey,
-        },
-    });
-}
-
 // Apply CORS middleware
 app.use(
     '*',
@@ -138,21 +141,6 @@ app.use(
     }),
 );
 
-// Middleware to initialize SQS client only for /api/calibrate endpoint
-app.use('/api/calibrate', (c: Context, next) => {
-    const env = c.env as Env;
-    if (!env.AWS_ACCESS_KEY_ID || !env.AWS_SECRET_ACCESS_KEY || !env.AWS_REGION) {
-        throw new Error('Missing required AWS environment variables');
-    }
-    if (!sqsClient) {
-        sqsClient = createSQSClient(
-            env.AWS_REGION,
-            env.AWS_ACCESS_KEY_ID,
-            env.AWS_SECRET_ACCESS_KEY,
-        );
-    }
-    return next();
-});
 
 // Swagger UI endpoint
 app.get('/swagger-ui', swaggerUI({ url: '/openapi.json' }));
@@ -182,57 +170,10 @@ app.openapi(healthRoute, async (c) => {
 });
 
 app.openapi(calibrateRoute, async (c) => {
-    try {
-        const env = c.env as Env;
-        const validBody = c.req.valid('json');
+    const env = c.env as Env;
+    const validBody = c.req.valid('json');
 
-        // Get the queue URL
-        let queueUrl: string;
-        try {
-            const getQueueUrlCommand = new GetQueueUrlCommand({
-                QueueName: env.SQS_QUEUE_NAME,
-            });
-            const queueUrlResponse = await sqsClient.send(getQueueUrlCommand);
-
-            if (!queueUrlResponse.QueueUrl) {
-                console.error('Queue URL not found in response');
-                return c.json({
-                    error: 'Queue URL not found in response',
-                }, 500);
-            }
-
-            queueUrl = queueUrlResponse.QueueUrl;
-        } catch (error) {
-            console.error('Failed to get queue URL:', error);
-            return c.json({
-                error: `Failed to get queue URL: ${error}`,
-            }, 500);
-        }
-
-        // Send message to SQS
-        try {
-            const sendMessageCommand = new SendMessageCommand({
-                QueueUrl: queueUrl,
-                MessageBody: JSON.stringify(validBody),
-            });
-
-            await sqsClient.send(sendMessageCommand);
-
-            return c.json({
-                status: 'Calibration queued',
-            }, 200);
-        } catch (error) {
-            console.error('Failed to send message to SQS:', error);
-            return c.json({
-                error: `Failed to send message to SQS: ${error}`,
-            }, 500);
-        }
-    } catch (error) {
-        console.error('Error processing request:', error);
-        return c.json({
-            error: 'Internal server error',
-        }, 500);
-    }
+    // TODO: call container to do calibration
 });
 
 export default app;
