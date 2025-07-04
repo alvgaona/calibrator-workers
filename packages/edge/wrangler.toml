@@ -1,5 +1,5 @@
 #:schema node_modules/wrangler/config-schema.json
-name = "calibrator-calibrate"
+name = "calibrator-edge"
 main = "src/index.ts"
 compatibility_date = "2024-08-21"
 compatibility_flags = ["nodejs_compat"]
@@ -35,5 +35,5 @@ AWS_REGION = "us-east-1"
 
 # Custom domain routes
 routes = [
-    { pattern = "calibrator-calibrate.alvgaona.dev", custom_domain = true },
+  { pattern = "calibrator-calibrate.alvgaona.dev", custom_domain = true },
 ]
