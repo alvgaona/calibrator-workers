@@ -173,7 +173,8 @@ app.openapi(calibrateRoute, async (c) => {
     const env = c.env as Env;
     const { userId, datasetId } = c.req.valid('json');
 
-    // TODO: call container to do calibration
+    // TODO: fetch files from R2 bucket,
+    // and push the message to the Cloudflare queue
     return c.json({
         status: 'Calibration queued',
     }, 200);
