@@ -162,7 +162,7 @@ app.doc('/openapi.json', {
 });
 
 // Route handlers
-app.openapi(healthRoute, async (c) => {
+app.openapi(healthRoute, async (c: Context) => {
     return c.json({
         name: 'calibrate',
         version: '0.0.1',
@@ -171,9 +171,12 @@ app.openapi(healthRoute, async (c) => {
 
 app.openapi(calibrateRoute, async (c) => {
     const env = c.env as Env;
-    const validBody = c.req.valid('json');
+    const { userId, datasetId } = c.req.valid('json');
 
     // TODO: call container to do calibration
+    return c.json({
+        status: 'Calibration queued',
+    }, 200);
 });
 
 export default app;
