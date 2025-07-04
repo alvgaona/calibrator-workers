@@ -1,4 +1,4 @@
-import { type Context } from 'hono';
+import type { Context } from 'hono';
 import { cors } from 'hono/cors';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
