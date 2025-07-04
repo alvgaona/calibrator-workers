@@ -2,6 +2,5 @@
 // by running `wrangler types`
 
 interface Env {
-	SQS_QUEUE_NAME: "calibrate-queue";
-	AWS_REGION: "us-east-1";
+    AWS_REGION: "us-east-1";
 }
