@@ -4,34 +4,4 @@ main = "src/index.ts"
 compatibility_date = "2024-08-21"
 compatibility_flags = ["nodejs_compat"]
 
-[[containers]]
-max_instances = 10
-name = "calibrate"
-class_name = "Calibrate"
-image = "registry.cloudflare.com/590d5e6a4382a813b506fa45ca1609e0/calibrate:latest"
-
-[[durable_objects.bindings]]
-name = "Calibrate"
-class_name = "Calibrate"
-
-[[migrations]]
-tag = "v1"
-new_sqlite_classes = ["Calibrate"]
-
-# Automatically place your workloads in an optimal location to minimize latency.
-# If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
-# rather than the end user may result in better performance.
-# Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-# [placement]
-# mode = "smart"
-
-# Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
-# Docs:
-# - https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-# Note: Use secrets to store sensitive data.
-# - https://developers.cloudflare.com/workers/configuration/secrets/
-[vars]
-AWS_REGION = "us-east-1"
-
-# Custom domain routes
 routes = [{ pattern = "calibrator-edge.alvgaona.dev", custom_domain = true }]

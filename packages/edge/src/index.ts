@@ -3,29 +3,6 @@ import { cors } from 'hono/cors';
 import { z } from 'zod';
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
-import type { ContainerOptions } from '@cloudflare/containers';
-import { Container, getRandom } from '@cloudflare/containers';
-import type { DurableObjectState } from '@cloudflare/workers-types';
-
-export class Calibrate extends Container {
-    constructor(ctx: DurableObjectState, env: Env, options?: ContainerOptions) {
-        super(ctx, env);
-        this.defaultPort = 8080;
-        this.sleepAfter = '10s';
-
-        this.envVars = {
-            AWS_REGION: env.AWS_REGION,
-            AWS_ACCESS_KEY_ID: env.AWS_ACCESS_KEY_ID,
-            AWS_SECRET_ACCESS_KEY: env.AWS_SECRET_ACCESS_KEY,
-        };
-    }
-}
-
-interface Env {
-    AWS_REGION: string;
-    AWS_ACCESS_KEY_ID: string;
-    AWS_SECRET_ACCESS_KEY: string;
-}
 
 // Zod schemas for request/response validation and OpenAPI documentation
 const calibrateRequestSchema = z.object({
@@ -56,7 +33,7 @@ const errorResponseSchema = z.object({
 const healthResponseSchema = z.object({
     name: z.string().openapi({
         description: 'Worker name',
-        example: 'calibrate'
+        example: 'edge'
     }),
     version: z.string().openapi({
         description: 'API version',
@@ -141,7 +118,6 @@ app.use(
     }),
 );
 
-
 // Swagger UI endpoint
 app.get('/swagger-ui', swaggerUI({ url: '/openapi.json' }));
 
@@ -164,12 +140,12 @@ app.doc('/openapi.json', {
 // Route handlers
 app.openapi(healthRoute, async (c: Context) => {
     return c.json({
-        name: 'calibrate',
+        name: 'edge',
         version: '0.0.1',
     });
 });
 
-app.openapi(calibrateRoute, async (c) => {
+app.openapi(calibrateRoute, async (c: Context) => {
     const env = c.env as Env;
     const { userId, datasetId } = c.req.valid('json');
 
