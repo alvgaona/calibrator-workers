@@ -1,20 +1,9 @@
 {
-    "name": "calibrator-workers",
-    "version": "0.0.1",
-    "description": "All Cloudflare workers used to run Calibrator app",
-    "author": {
-        "name": "Alvaro Gaona",
-        "email": "alvgaona@gmail.com"
-    },
-    "repository": {
-        "url": "https://github.com/alvgaona/calibrator-workers"
-    },
+    "name": "calibrator",
     "private": true,
-    "engines": {
-        "bun": "^1.0.0"
-    },
     "workspaces": [
-        "packages/*"
+        "apps/edge",
+        "apps/upload"
     ],
     "scripts": {
         "format:check": "biome check .",
@@ -23,7 +12,23 @@
         "lint:fix": "biome lint --write .",
         "check": "biome check --write ."
     },
+    "repository": {
+        "url": "https://github.com/alvgaona/calibrator"
+    },
+    "engines": {
+        "bun": "^1.0.0"
+    },
     "devDependencies": {
-        "@biomejs/biome": "^1.9.4"
+        "@biomejs/biome": "^1.9.4",
+        "@cloudflare/vitest-pool-workers": "^0.8.47",
+        "typescript": "^5.8.3",
+        "vitest": "3.2.3",
+        "wrangler": "^4.22.0"
+    },
+    "dependencies": {
+        "@hono/swagger-ui": "^0.5.2",
+        "@hono/zod-openapi": "^0.19.8",
+        "hono": "^4.8.3",
+        "zod": "^3.25.67"
     }
 }

@@ -1,0 +1,16 @@
+{
+    "name": "upload",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "deploy": "wrangler deploy",
+        "dev": "wrangler dev",
+        "start": "wrangler dev",
+        "test": "vitest",
+        "cf-typegen": "wrangler types"
+    },
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.830.0",
+        "@aws-sdk/s3-request-presigner": "^3.830.0"
+    }
+}
