@@ -8,5 +8,5 @@
         "start": "wrangler dev",
         "test": "vitest",
         "cf-typegen": "wrangler types"
-    },
+    }
 }
