@@ -1,6 +1,7 @@
-name: Format
+name: format
 
 on:
+  workflow_call:
   push:
     branches:
       - main
@@ -14,25 +15,25 @@ concurrency:
 
 jobs:
   format-check:
-    name: Format Check
+    name: format-check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: checkout-repository
         uses: actions/checkout@v4
 
-      - name: Setup Rust
+      - name: setup-rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           toolchain: stable
           components: rustfmt
 
-      - name: Setup Bun
+      - name: setup-bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.2.18
 
-      - name: Install dependencies
+      - name: install-dependencies
         run: bun install --frozen-lockfile
 
-      - name: Format check
+      - name: format-check
         run: bun format
