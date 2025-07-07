@@ -6,6 +6,12 @@ on:
       - main
     paths:
       - "apps/**"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for manual deployment"
+        required: false
+        default: "Manual deployment"
 
 jobs:
   detect-changes:
@@ -170,6 +176,72 @@ jobs:
           token: ${{ github.token }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: success
+
+      - name: update-deployment-status-failure
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ github.token }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: failure
+
+  deploy-all:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: create-github-deployment
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: ${{ github.token }}
+          environment: Production
+          description: Deploy all workers - ${{ github.event.inputs.reason }}
+
+      - name: update-deployment-status-in-progress
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ github.token }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: in_progress
+
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+
+      - name: deploy-edge-worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/edge
+          command: deploy
+
+      - name: deploy-upload-worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/upload
+          command: deploy
+
+      - name: deploy-unpack-worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/unpack
+          command: deploy
+
+      - name: update-deployment-status-success
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ github.token }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: success
+          environment-url: https://calibrator-edge.alvgaona.dev
 
       - name: update-deployment-status-failure
         if: failure()
