@@ -4,22 +4,24 @@
     "": {
       "name": "calibrator-workers",
       "dependencies": {
+        "@biomejs/biome": "1.9.4",
+        "@cloudflare/vitest-pool-workers": "^0.8.47",
         "@hono/swagger-ui": "^0.5.2",
         "@hono/zod-openapi": "^0.19.8",
         "hono": "^4.8.3",
-        "zod": "^3.25.67",
-      },
-      "devDependencies": {
-        "@biomejs/biome": "^1.9.4",
-        "@cloudflare/vitest-pool-workers": "^0.8.47",
-        "turbo": "^2.5.4",
+        "turbo": "2.5.4",
         "typescript": "^5.8.3",
         "vitest": "3.2.3",
         "wrangler": "^4.22.0",
+        "zod": "^3.25.67",
       },
     },
     "apps/edge": {
       "name": "@calibrator/edge",
+      "version": "0.0.1",
+    },
+    "apps/unpack": {
+      "name": "@calibrator/unpack",
       "version": "0.0.1",
     },
     "apps/upload": {
@@ -133,6 +135,8 @@
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@1.9.4", "", { "os": "win32", "cpu": "x64" }, "sha512-8Y5wMhVIPaWe6jw2H+KlEm4wP/f7EW3810ZLmDlrEEy5KvBsb9ECEfu/kMWD484ijfQ8+nIi0giMgu9g1UAuuA=="],
 
     "@calibrator/edge": ["@calibrator/edge@workspace:apps/edge"],
+
+    "@calibrator/unpack": ["@calibrator/unpack@workspace:apps/unpack"],
 
     "@calibrator/upload": ["@calibrator/upload@workspace:apps/upload"],
 
