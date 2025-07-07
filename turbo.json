@@ -1,0 +1,82 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "ui": "tui",
+    "tasks": {
+        "dev": {
+            "cache": false,
+            "persistent": true,
+            "dependsOn": [
+                "^build"
+            ]
+        },
+        "build": {
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": [
+                "dist/**",
+                ".wrangler/**",
+                "target/**"
+            ]
+        },
+        "deploy": {
+            "dependsOn": [
+                "build",
+                "test",
+                "lint"
+            ],
+            "cache": false
+        },
+        "test": {
+            "dependsOn": [
+                "^build"
+            ]
+        },
+        "test:watch": {
+            "cache": false,
+            "persistent": true
+        },
+        "lint": {
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": []
+        },
+        "lint:fix": {
+            "dependsOn": [
+                "^build"
+            ],
+            "cache": false
+        },
+        "typecheck": {
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": []
+        },
+        "clean": {
+            "cache": false
+        },
+        "cf-typegen": {
+            "outputs": [
+                "**/*.d.ts"
+            ]
+        },
+        "start": {
+            "cache": false,
+            "persistent": true,
+            "dependsOn": [
+                "^build"
+            ]
+        }
+    },
+    "globalDependencies": [
+        "package.json",
+        "turbo.json",
+        "tsconfig.json",
+        "biome.json"
+    ],
+    "globalEnv": [
+        "NODE_ENV"
+    ]
+}

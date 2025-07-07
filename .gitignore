@@ -5,6 +5,9 @@ node_modules/
 target/
 dist/
 
+# Turbo cache
+.turbo/
+
 # Cloudflare Workers
 .wrangler/
 

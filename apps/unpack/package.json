@@ -1,14 +1,14 @@
 {
-    "name": "@calibrator/edge",
+    "name": "@calibrator/unpack",
     "version": "0.0.1",
     "private": true,
     "scripts": {
+        "build": "cargo build --release",
         "deploy": "wrangler deploy",
         "dev": "wrangler dev",
         "start": "wrangler dev",
-        "test": "vitest run",
+        "test": "cargo test",
         "cf-typegen": "wrangler types",
-        "typecheck": "tsc --noEmit",
-        "lint": "biome lint ."
+        "lint": "cargo clippy"
     }
 }
