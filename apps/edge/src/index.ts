@@ -1,4 +1,3 @@
-import type { Context } from 'hono';
 import { cors } from 'hono/cors';
 import { z } from 'zod';
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
@@ -138,14 +137,14 @@ app.doc('/openapi.json', {
 });
 
 // Route handlers
-app.openapi(healthRoute, async (c: Context) => {
+app.openapi(healthRoute, async (c) => {
     return c.json({
         name: 'edge',
         version: '0.0.1',
     });
 });
 
-app.openapi(calibrateRoute, async (c: Context) => {
+app.openapi(calibrateRoute, async (c) => {
     const env = c.env as Env;
     const { userId, datasetId } = c.req.valid('json');
 

@@ -1,3 +1,0 @@
-[workspace]
-members = ["apps/unpack"]
-resolver = "2"
