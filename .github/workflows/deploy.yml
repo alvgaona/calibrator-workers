@@ -13,6 +13,10 @@ on:
         required: false
         default: "Manual deployment"
 
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   detect-changes:
     runs-on: ubuntu-latest
@@ -58,6 +62,12 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+
+      - name: build-and-test
+        run: |
+          bun run build:edge
+          bun run test --filter=@calibrator/edge
+          bun run lint --filter=@calibrator/edge
 
       - name: deploy-to-cloudflare
         uses: cloudflare/wrangler-action@v3
@@ -110,6 +120,12 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
 
+      - name: build-and-test
+        run: |
+          bun run build:upload
+          bun run test --filter=@calibrator/upload
+          bun run lint --filter=@calibrator/upload
+
       - name: deploy-to-cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
@@ -161,6 +177,18 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
 
+      - name: setup-rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: build-and-test
+        run: |
+          bun run build:unpack
+          bun run test --filter=@calibrator/unpack
+          bun run lint --filter=@calibrator/unpack
+
       - name: deploy-to-cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
@@ -209,6 +237,18 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+
+      - name: setup-rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: build-and-test-all
+        run: |
+          bun run build
+          bun run test
+          bun run lint
 
       - name: deploy-edge-worker
         uses: cloudflare/wrangler-action@v3
