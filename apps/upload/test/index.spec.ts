@@ -12,19 +12,29 @@ import worker from '../src/index';
 // `Request` to pass to `worker.fetch()`.
 const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
 
-describe('Hello World worker', () => {
-    it('responds with Hello World! (unit style)', async () => {
-        const request = new IncomingRequest('http://example.com');
+describe('Upload worker', () => {
+    it('responds with worker info at health endpoint (unit style)', async () => {
+        const request = new IncomingRequest('http://example.com/api/health');
         // Create an empty context to pass to `worker.fetch()`.
         const ctx = createExecutionContext();
         const response = await worker.fetch(request, env, ctx);
         // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
         await waitOnExecutionContext(ctx);
-        expect(await response.text()).toMatchInlineSnapshot(`"Hello World!"`);
+        expect(await response.json()).toMatchInlineSnapshot(`
+          {
+            "name": "upload",
+            "version": "0.0.1",
+          }
+        `);
     });
 
-    it('responds with Hello World! (integration style)', async () => {
-        const response = await SELF.fetch('https://example.com');
-        expect(await response.text()).toMatchInlineSnapshot(`"Hello World!"`);
+    it('responds with worker info at health endpoint (integration style)', async () => {
+        const response = await SELF.fetch('https://example.com/api/health');
+        expect(await response.json()).toMatchInlineSnapshot(`
+          {
+            "name": "upload",
+            "version": "0.0.1",
+          }
+        `);
     });
 });

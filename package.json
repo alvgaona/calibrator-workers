@@ -1,16 +1,27 @@
 {
     "name": "calibrator",
     "private": true,
-    "workspaces": [
-        "apps/edge",
-        "apps/upload"
-    ],
+    "workspaces": ["apps/edge", "apps/upload", "apps/unpack"],
     "scripts": {
-        "format:check": "biome check .",
+        "build": "turbo build",
+        "clean": "git clean -xdf node_modules",
+        "clean:workspaces": "turbo clean",
+        "dev": "turbo dev --parallel",
+        "test": "turbo test --parallel",
+        "dev:edge": "turbo dev --filter=@calibrator/edge",
+        "dev:upload": "turbo dev --filter=@calibrator/upload",
+        "dev:unpack": "turbo dev --filter=@calibrator/unpack",
+        "build:edge": "turbo build --filter=@calibrator/edge",
+        "build:upload": "turbo build --filter=@calibrator/upload",
+        "build:unpack": "turbo build --filter=@calibrator/unpack",
+        "start:edge": "turbo start --filter=@calibrator/edge",
+        "start:upload": "turbo start --filter=@calibrator/upload",
+        "start:unpack": "turbo start --filter=@calibrator/unpack",
+        "deploy": "turbo deploy",
+        "cf-typegen": "turbo cf-typegen",
         "format": "biome format --write .",
-        "lint": "biome lint .",
-        "lint:fix": "biome lint --write .",
-        "check": "biome check --write ."
+        "lint": "turbo lint",
+        "typecheck": "turbo typecheck"
     },
     "repository": {
         "url": "https://github.com/alvgaona/calibrator"
@@ -18,17 +29,17 @@
     "engines": {
         "bun": "^1.0.0"
     },
-    "devDependencies": {
-        "@biomejs/biome": "^1.9.4",
-        "@cloudflare/vitest-pool-workers": "^0.8.47",
-        "typescript": "^5.8.3",
-        "vitest": "3.2.3",
-        "wrangler": "^4.22.0"
-    },
     "dependencies": {
+        "@biomejs/biome": "1.9.4",
+        "@cloudflare/vitest-pool-workers": "^0.8.47",
         "@hono/swagger-ui": "^0.5.2",
         "@hono/zod-openapi": "^0.19.8",
         "hono": "^4.8.3",
+        "turbo": "2.5.4",
+        "typescript": "^5.8.3",
+        "vitest": "3.2.3",
+        "wrangler": "^4.22.0",
         "zod": "^3.25.67"
-    }
+    },
+    "packageManager": "bun@1.2.18"
 }

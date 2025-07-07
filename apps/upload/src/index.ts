@@ -17,40 +17,41 @@ interface Env {
 const uploadRequestSchema = z.object({
     userId: z.string().min(1, 'userId is required').openapi({
         description: 'Unique identifier for the user',
-        example: 'user123'
+        example: 'user123',
     }),
     dataset: z.string().min(1, 'dataset is required').openapi({
         description: 'Dataset name for organizing uploads',
-        example: 'training-data'
+        example: 'training-data',
     }),
     fileName: z.string().min(1, 'fileName is required').openapi({
         description: 'Name of the file to upload',
-        example: 'images.tar.gz'
+        example: 'images.tar.gz',
     }),
 });
 
 const uploadResponseSchema = z.object({
     presignedUrl: z.string().url().openapi({
         description: 'Pre-signed URL for uploading the file',
-        example: 'https://example.r2.cloudflarestorage.com/bucket/user123/dataset/file.csv?X-Amz-Algorithm=...'
+        example:
+            'https://example.r2.cloudflarestorage.com/bucket/user123/dataset/file.csv?X-Amz-Algorithm=...',
     }),
 });
 
 const errorResponseSchema = z.object({
     error: z.string().openapi({
         description: 'Error message',
-        example: 'Missing required fields'
+        example: 'Missing required fields',
     }),
 });
 
 const healthResponseSchema = z.object({
     name: z.string().openapi({
         description: 'Worker name',
-        example: 'upload'
+        example: 'upload',
     }),
     version: z.string().openapi({
         description: 'API version',
-        example: '0.0.1'
+        example: '0.0.1',
     }),
 });
 
@@ -76,7 +77,8 @@ const uploadRoute = createRoute({
     method: 'post',
     path: '/api/upload',
     summary: 'Generate presigned upload URL',
-    description: 'Generates a presigned URL for uploading files to object storage',
+    description:
+        'Generates a presigned URL for uploading files to object storage',
     request: {
         body: {
             content: {
@@ -173,7 +175,8 @@ app.doc('/openapi.json', {
     info: {
         title: 'Upload API',
         version: '0.0.1',
-        description: 'API for generating presigned URLs for file uploads to object storage',
+        description:
+            'API for generating presigned URLs for file uploads to object storage',
     },
     servers: [
         {

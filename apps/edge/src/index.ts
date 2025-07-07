@@ -8,36 +8,36 @@ import { swaggerUI } from '@hono/swagger-ui';
 const calibrateRequestSchema = z.object({
     userId: z.string().min(1, 'userId is required').openapi({
         description: 'Unique identifier for the user',
-        example: 'user123'
+        example: 'user123',
     }),
     datasetId: z.string().min(1, 'datasetId is required').openapi({
         description: 'Unique identifier for the dataset to calibrate',
-        example: 'dataset456'
+        example: 'dataset456',
     }),
 });
 
 const calibrateResponseSchema = z.object({
     status: z.string().openapi({
         description: 'Status of the calibration request',
-        example: 'Calibration queued'
+        example: 'Calibration queued',
     }),
 });
 
 const errorResponseSchema = z.object({
     error: z.string().openapi({
         description: 'Error message',
-        example: 'Invalid request parameters'
+        example: 'Invalid request parameters',
     }),
 });
 
 const healthResponseSchema = z.object({
     name: z.string().openapi({
         description: 'Worker name',
-        example: 'edge'
+        example: 'edge',
     }),
     version: z.string().openapi({
         description: 'API version',
-        example: '0.0.1'
+        example: '0.0.1',
     }),
 });
 
@@ -151,9 +151,12 @@ app.openapi(calibrateRoute, async (c: Context) => {
 
     // TODO: fetch files from R2 bucket,
     // and push the message to the Cloudflare queue
-    return c.json({
-        status: 'Calibration queued',
-    }, 200);
+    return c.json(
+        {
+            status: 'Calibration queued',
+        },
+        200,
+    );
 });
 
 export default app;
