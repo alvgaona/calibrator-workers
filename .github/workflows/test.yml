@@ -38,4 +38,4 @@ jobs:
         run: bun run build
 
       - name: run-all-tests
-        run: bun test
+        run: bun run test
