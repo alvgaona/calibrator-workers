@@ -1,0 +1,142 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-all:
+    name: Build All Workspaces
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.18
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build all workspaces
+        run: bun build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            apps/*/dist
+            packages/*/dist
+            apps/unpack/target/wasm32-unknown-unknown/release/*.wasm
+          retention-days: 1
+
+  build-edge:
+    name: Build Edge Worker
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && 
+       contains(github.event.pull_request.labels.*.name, 'edge') ||
+       contains(github.event.pull_request.title, 'edge'))
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.18
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build Edge Worker
+        run: bun turbo build --filter=@calibrator/edge
+
+      - name: Upload Edge build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: edge-build-artifacts
+          path: apps/edge/dist
+          retention-days: 1
+
+  build-unpack:
+    name: Build Unpack Worker
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && 
+       contains(github.event.pull_request.labels.*.name, 'unpack') ||
+       contains(github.event.pull_request.title, 'unpack'))
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.18
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build Unpack Worker
+        run: bun turbo build --filter=@calibrator/unpack
+
+      - name: Upload Unpack build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: unpack-build-artifacts
+          path: apps/unpack/target/wasm32-unknown-unknown/release/*.wasm
+          retention-days: 1
+
+  build-upload:
+    name: Build Upload Worker
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && 
+       contains(github.event.pull_request.labels.*.name, 'upload') ||
+       contains(github.event.pull_request.title, 'upload'))
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.18
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build Upload Worker
+        run: bun turbo build --filter=@calibrator/upload
+
+      - name: Upload Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: upload-build-artifacts
+          path: apps/upload/dist
+          retention-days: 1
