@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "packages/**"
+      - "apps/**"
 
 jobs:
   detect-changes:
@@ -20,9 +20,9 @@ jobs:
         with:
           filters: |
             calibrate:
-              - 'packages/calibrate/**'
+              - 'apps/calibrate/**'
             upload:
-              - 'packages/upload/**'
+              - 'apps/upload/**'
 
   deploy-calibrate:
     needs: detect-changes
@@ -55,7 +55,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: packages/calibrate
+          workingDirectory: apps/calibrate
           command: deploy
 
       - name: update-deployment-status-success
@@ -106,7 +106,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: packages/upload
+          workingDirectory: apps/upload
           command: deploy
 
       - name: update-deployment-status-success
