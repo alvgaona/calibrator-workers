@@ -1,0 +1,14 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "@calibrator/calibrate",
+      "dependencies": {
+        "@cloudflare/containers": "^0.0.24",
+      },
+    },
+  },
+  "packages": {
+    "@cloudflare/containers": ["@cloudflare/containers@0.0.24", "", {}, "sha512-M9XMcaHSd2i2ijdFdc/1lq32loKe0fu3N3lSgH+BdzyWfLQDOoDVhYo42Agkagg6G4CJS8w9kzYhDjh3NPTrhw=="],
+  }
+}

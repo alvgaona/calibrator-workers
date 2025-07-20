@@ -1,0 +1,8 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "lib": ["esnext"]
+    },
+    "include": ["worker-configuration.d.ts", "src/**/*.ts"],
+    "exclude": ["test"]
+}
