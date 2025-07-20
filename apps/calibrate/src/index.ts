@@ -93,20 +93,20 @@ export default {
     fetch: app.fetch,
     queue: async (batch: MessageBatch, env: Env, ctx: ExecutionContext) => {
         for (const message of batch.messages) {
-            const messageBody = message.body
+            const messageBody = message.body;
 
-            console.log(messageBody)
+            console.log(messageBody);
 
-            const id = env.Calibrate.idFromName('foo')
-            const instance = env.Calibrate.get(id)
+            const id = env.Calibrate.idFromName('foo');
+            const instance = env.Calibrate.get(id);
 
             await instance.start({
                 envVars: {
                     AWS_REGION: env.AWS_REGION,
                     AWS_ACCESS_KEY_ID: await env.R2_ACCESS_KEY_ID.get(),
                     AWS_SECRET_ACCESS_KEY: await env.R2_SECRET_ACCESS_KEY.get(),
-                }
-            })
+                },
+            });
         }
     },
 };
