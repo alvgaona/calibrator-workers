@@ -1,12 +1,7 @@
 {
     "name": "calibrator",
     "private": true,
-    "workspaces": [
-        "apps/edge",
-        "apps/upload",
-        "apps/unpack",
-        "apps/calibrate"
-    ],
+    "workspaces": ["apps/edge", "apps/upload", "apps/unpack", "apps/calibrate"],
     "scripts": {
         "build": "turbo build",
         "clean": "git clean -xdf node_modules",
