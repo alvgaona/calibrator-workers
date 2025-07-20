@@ -16,6 +16,13 @@
         "zod": "^3.25.67",
       },
     },
+    "apps/calibrate": {
+      "name": "@calibrator/calibrate",
+      "version": "0.0.1",
+      "dependencies": {
+        "@cloudflare/containers": "^0.0.24",
+      },
+    },
     "apps/edge": {
       "name": "@calibrator/edge",
       "version": "0.0.1",
@@ -134,11 +141,15 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@1.9.4", "", { "os": "win32", "cpu": "x64" }, "sha512-8Y5wMhVIPaWe6jw2H+KlEm4wP/f7EW3810ZLmDlrEEy5KvBsb9ECEfu/kMWD484ijfQ8+nIi0giMgu9g1UAuuA=="],
 
+    "@calibrator/calibrate": ["@calibrator/calibrate@workspace:apps/calibrate"],
+
     "@calibrator/edge": ["@calibrator/edge@workspace:apps/edge"],
 
     "@calibrator/unpack": ["@calibrator/unpack@workspace:apps/unpack"],
 
     "@calibrator/upload": ["@calibrator/upload@workspace:apps/upload"],
+
+    "@cloudflare/containers": ["@cloudflare/containers@0.0.24", "", {}, "sha512-M9XMcaHSd2i2ijdFdc/1lq32loKe0fu3N3lSgH+BdzyWfLQDOoDVhYo42Agkagg6G4CJS8w9kzYhDjh3NPTrhw=="],
 
     "@cloudflare/kv-asset-handler": ["@cloudflare/kv-asset-handler@0.4.0", "", { "dependencies": { "mime": "^3.0.0" } }, "sha512-+tv3z+SPp+gqTIcImN9o0hqE9xyfQjI1XD9pL6NuKjua9B1y7mNYv0S9cP+QEbA4ppVgGZEmKOvHX5G5Ei1CVA=="],
 
