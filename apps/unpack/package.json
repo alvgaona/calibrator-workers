@@ -8,7 +8,6 @@
         "dev": "wrangler dev",
         "start": "wrangler dev",
         "test": "cargo test",
-        "cf-typegen": "wrangler types",
         "lint": "cargo clippy"
     }
 }

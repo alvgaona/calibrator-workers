@@ -15,9 +15,15 @@ secrets_store_secrets = [
 
 [vars]
 AWS_REGION = "us-east-1"
+R2_BUCKET = "calibrator-input"
+R2_ENDPOINT_URL = "https://590d5e6a4382a813b506fa45ca1609e0.r2.cloudflarestorage.com"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
 
 [[queues.consumers]]
-queue = "calibrate-queue"
+queue = "calibrator-calibrate"
 max_batch_size = 10
 max_batch_timeout = 60
 
@@ -25,7 +31,7 @@ max_batch_timeout = 60
 max_instances = 10
 name = "calibrate"
 class_name = "Calibrate"
-image = "registry.cloudflare.com/590d5e6a4382a813b506fa45ca1609e0/calibrate:latest"
+image = "registry.cloudflare.com/590d5e6a4382a813b506fa45ca1609e0/calibrate:v0.0.1"
 
 [[durable_objects.bindings]]
 name = "Calibrate"
