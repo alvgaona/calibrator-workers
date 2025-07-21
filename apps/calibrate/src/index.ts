@@ -28,6 +28,14 @@ const healthResponseSchema = z.object({
     }),
 });
 
+const queueMessageSchema = z.object({
+    metadata: z.object({
+        userId: z.string(),
+        datasetId: z.string(),
+    }),
+    images: z.array(z.string()),
+});
+
 // OpenAPI route definitions
 const healthRoute = createRoute({
     method: 'get',
@@ -93,20 +101,21 @@ export default {
     fetch: app.fetch,
     queue: async (batch: MessageBatch, env: Env, ctx: ExecutionContext) => {
         for (const message of batch.messages) {
-            const messageBody = message.body;
+            const messageBody = queueMessageSchema.parse(message.body);
 
             console.log(messageBody);
 
-            const id = env.Calibrate.idFromName('foo');
-            const instance = env.Calibrate.get(id);
+            // const id = env.Calibrate.idFromName('foo');
+            // const instance = env.Calibrate.get(id);
 
-            await instance.start({
-                envVars: {
-                    AWS_REGION: env.AWS_REGION,
-                    AWS_ACCESS_KEY_ID: await env.R2_ACCESS_KEY_ID.get(),
-                    AWS_SECRET_ACCESS_KEY: await env.R2_SECRET_ACCESS_KEY.get(),
-                },
-            });
+            // await instance.start({
+            //     envVars: {
+            //         R2_ACCESS_KEY: await env.R2_ACCESS_KEY_ID.get(),
+            //         R2_SECRET_ACCESS_KEY: await env.R2_SECRET_ACCESS_KEY.get(),
+            //         R2_BUCKET: env.R2_BUCKET,
+            //         R2_ENDPOINT_URL: env.R2_ENDPOINT_URL,
+            //     },
+            // });
         }
     },
 };

@@ -5,14 +5,17 @@ import { swaggerUI } from '@hono/swagger-ui';
 
 // Zod schemas for request/response validation and OpenAPI documentation
 const calibrateRequestSchema = z.object({
-    userId: z.string().min(1, 'userId is required').openapi({
-        description: 'Unique identifier for the user',
-        example: 'user123',
+    metadata: z.object({
+        userId: z.string().min(1, 'userId is required').openapi({
+            description: 'Unique identifier for the user',
+            example: 'user123',
+        }),
+        datasetId: z.string().min(1, 'datasetId is required').openapi({
+            description: 'Unique identifier for the dataset to calibrate',
+            example: 'dataset456',
+        }),
     }),
-    datasetId: z.string().min(1, 'datasetId is required').openapi({
-        description: 'Unique identifier for the dataset to calibrate',
-        example: 'dataset456',
-    }),
+    images: z.array(z.string()),
 });
 
 const calibrateResponseSchema = z.object({
@@ -146,10 +149,10 @@ app.openapi(healthRoute, async (c) => {
 
 app.openapi(calibrateRoute, async (c) => {
     const env = c.env as Env;
-    const { userId, datasetId } = c.req.valid('json');
+    const validReq = c.req.valid('json');
 
-    // TODO: fetch files from R2 bucket,
-    // and push the message to the Cloudflare queue
+    await env.CALIBRATOR_CALIBRATE.send(validReq);
+
     return c.json(
         {
             status: 'Calibration queued',
