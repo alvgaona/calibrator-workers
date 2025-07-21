@@ -84,7 +84,7 @@ app.doc('/openapi.json', {
 // Route handlers
 app.openapi(healthRoute, async (c) => {
     return c.json({
-        name: 'edge',
+        name: 'calibrate',
         version: '0.0.1',
     });
 });
