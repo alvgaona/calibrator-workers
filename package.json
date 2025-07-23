@@ -6,7 +6,9 @@
         "apps/upload",
         "apps/unpack",
         "apps/calibrate",
-        "apps/ui"
+        "apps/ui",
+        "packages/auth-middleware",
+        "packages/tsconfig"
     ],
     "scripts": {
         "build": "turbo build",
