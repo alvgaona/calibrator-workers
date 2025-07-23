@@ -26,9 +26,9 @@
             "dependsOn": ["^build"],
             "outputs": []
         },
-        "lint:fix": {
+        "format": {
             "dependsOn": ["^build"],
-            "cache": false
+            "outputs": []
         },
         "typecheck": {
             "dependsOn": ["^build"],

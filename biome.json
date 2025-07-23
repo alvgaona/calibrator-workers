@@ -1,19 +1,12 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
     "vcs": {
         "enabled": true,
         "clientKind": "git",
         "useIgnoreFile": true
     },
     "files": {
-        "ignoreUnknown": false,
-        "ignore": [
-            "node_modules/**",
-            "dist/**",
-            "build/**",
-            ".wrangler/**",
-            "**/*.d.ts"
-        ]
+        "ignoreUnknown": false
     },
     "formatter": {
         "enabled": true,
@@ -22,13 +15,18 @@
         "indentWidth": 4,
         "lineEnding": "lf",
         "lineWidth": 80,
-        "attributePosition": "auto"
-    },
-    "organizeImports": {
-        "enabled": true
+        "attributePosition": "auto",
+        "includes": [
+            "**",
+            "!**/worker-configuration.d.ts"
+        ]
     },
     "linter": {
         "enabled": true,
+        "includes": [
+            "**",
+            "!**/worker-configuration.d.ts"
+        ],
         "rules": {
             "recommended": true
         }

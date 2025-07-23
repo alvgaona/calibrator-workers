@@ -2,7 +2,7 @@ import { cors } from 'hono/cors';
 import { z } from 'zod';
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
-import { Container, getRandom } from '@cloudflare/containers';
+import { Container } from '@cloudflare/containers';
 
 export class Calibrate extends Container {
     defaultPort = 8080;
@@ -10,7 +10,7 @@ export class Calibrate extends Container {
 }
 
 // Zod schemas for request/response validation and OpenAPI documentation
-const errorResponseSchema = z.object({
+const _errorResponseSchema = z.object({
     error: z.string().openapi({
         description: 'Error message',
         example: 'Invalid request parameters',
@@ -99,7 +99,7 @@ app.openapi(healthRoute, async (c) => {
 
 export default {
     fetch: app.fetch,
-    queue: async (batch: MessageBatch, env: Env, ctx: ExecutionContext) => {
+    queue: async (batch: MessageBatch, _env: Env, _ctx: ExecutionContext) => {
         for (const message of batch.messages) {
             const messageBody = queueMessageSchema.parse(message.body);
 
