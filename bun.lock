@@ -26,6 +26,10 @@
     "apps/edge": {
       "name": "@calibrator/edge",
       "version": "0.0.1",
+      "dependencies": {
+        "@calibrator/auth-middleware": "workspace:*",
+        "jose": "^5.0.0",
+      },
     },
     "apps/ui": {
       "name": "@calibrator/ui",
@@ -56,6 +60,22 @@
         "@aws-sdk/client-s3": "^3.830.0",
         "@aws-sdk/s3-request-presigner": "^3.830.0",
       },
+    },
+    "packages/auth-middleware": {
+      "name": "@calibrator/auth-middleware",
+      "version": "0.0.1",
+      "dependencies": {
+        "hono": "^4.8.3",
+        "jose": "^5.0.0",
+      },
+      "devDependencies": {
+        "@types/node": "^20.0.0",
+        "typescript": "^5.8.3",
+      },
+    },
+    "packages/tsconfig": {
+      "name": "@calibrator/tsconfig",
+      "version": "1.0.0",
     },
   },
   "packages": {
@@ -163,9 +183,13 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.1.2", "", { "os": "win32", "cpu": "x64" }, "sha512-9zajnk59PMpjBkty3bK2IrjUsUHvqe9HWwyAWQBjGLE7MIBjbX2vwv1XPEhmO2RRuGoTkVx3WCanHrjAytICLA=="],
 
+    "@calibrator/auth-middleware": ["@calibrator/auth-middleware@workspace:packages/auth-middleware"],
+
     "@calibrator/calibrate": ["@calibrator/calibrate@workspace:apps/calibrate"],
 
     "@calibrator/edge": ["@calibrator/edge@workspace:apps/edge"],
+
+    "@calibrator/tsconfig": ["@calibrator/tsconfig@workspace:packages/tsconfig"],
 
     "@calibrator/ui": ["@calibrator/ui@workspace:apps/ui"],
 

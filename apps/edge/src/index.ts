@@ -2,6 +2,7 @@ import { cors } from 'hono/cors';
 import { z } from 'zod';
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
+import { createStackAuthMiddleware } from '@calibrator/auth-middleware';
 
 // Zod schemas for request/response validation and OpenAPI documentation
 const calibrateRequestSchema = z.object({
@@ -118,6 +119,11 @@ app.use(
         maxAge: 600,
         credentials: true,
     }),
+);
+
+app.use(
+    '/api/*',
+    createStackAuthMiddleware('c38e1211-1625-476a-a90a-4f2b20cc9eb8'),
 );
 
 // Swagger UI endpoint
