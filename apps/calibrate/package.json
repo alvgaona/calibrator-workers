@@ -10,7 +10,8 @@
         "test": "vitest run",
         "cf-typegen": "wrangler types",
         "typecheck": "tsc --noEmit",
-        "lint": "biome lint ."
+        "lint": "biome lint --write .",
+        "format": "biome format --write ."
     },
     "dependencies": {
         "@cloudflare/containers": "^0.0.24"
