@@ -5,7 +5,9 @@ import { stackClientApp } from '@/stack';
 export async function middleware(req: NextRequest) {
     // Bypass authentication in non-production environments
     if (process.env.NODE_ENV !== 'production') {
-        console.log('[UI Middleware] Bypassing authentication - not in production mode');
+        console.log(
+            '[UI Middleware] Bypassing authentication - not in production mode',
+        );
         return NextResponse.next();
     }
 

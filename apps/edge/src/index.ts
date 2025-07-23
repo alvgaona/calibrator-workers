@@ -126,10 +126,14 @@ app.use('/api/*', async (c, next) => {
     const environment = env.ENVIRONMENT || 'development';
 
     if (environment === 'production') {
-        const authMiddleware = createStackAuthMiddleware('c38e1211-1625-476a-a90a-4f2b20cc9eb8');
+        const authMiddleware = createStackAuthMiddleware(
+            'c38e1211-1625-476a-a90a-4f2b20cc9eb8',
+        );
         return authMiddleware(c, next);
     } else {
-        console.log(`[Edge] Bypassing authentication - environment: ${environment}`);
+        console.log(
+            `[Edge] Bypassing authentication - environment: ${environment}`,
+        );
         await next();
     }
 });
