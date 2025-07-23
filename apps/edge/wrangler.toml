@@ -9,3 +9,10 @@ routes = [{ pattern = "calibrator-edge.alvgaona.dev", custom_domain = true }]
 [[queues.producers]]
 queue = "calibrator-calibrate"
 binding = "CALIBRATOR_CALIBRATE"
+
+[vars]
+ENVIRONMENT = "development"
+
+[env.production]
+name = "calibrator-edge-production"
+vars = { ENVIRONMENT = "production" }
