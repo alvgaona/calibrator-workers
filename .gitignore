@@ -5,6 +5,9 @@ node_modules/
 target/
 dist/
 
+# Next.js
+.next/
+
 # Turbo cache
 .turbo/
 
