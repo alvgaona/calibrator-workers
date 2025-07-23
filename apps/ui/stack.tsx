@@ -1,9 +1,9 @@
-import "server-only";
+import 'server-only';
 
-import { StackServerApp, StackClientApp } from "@stackframe/stack";
+import { StackServerApp, StackClientApp } from '@stackframe/stack';
 
 export const stackServerApp = new StackServerApp({
-    tokenStore: "nextjs-cookie",
+    tokenStore: 'nextjs-cookie',
 });
 
 export const stackClientApp = new StackClientApp({
