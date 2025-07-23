@@ -1,6 +1,6 @@
+import type { MiddlewareHandler } from 'hono';
 import { createMiddleware } from 'hono/factory';
 import * as jose from 'jose';
-import type { MiddlewareHandler } from 'hono';
 
 export interface AuthMiddlewareOptions {
     /**
@@ -80,7 +80,8 @@ export function createStackAuthMiddleware(
     options?: Partial<AuthMiddlewareOptions>,
 ) {
     return createAuthMiddleware({
-        jwksUrl: `https://api.stack-auth.com/api/v1/projects/${projectId}/.well-known/jwks.json`,
+        jwksUrl: `https://api.stack-auth.com/api/v1/projects/${projectId}/.well-known/jwks.
+json`,
         ...options,
     });
 }
