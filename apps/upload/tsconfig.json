@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "@calibrator/tsconfig/base.json",
     "include": ["worker-configuration.d.ts", "src/**/*.ts"],
     "exclude": ["test"]
 }
