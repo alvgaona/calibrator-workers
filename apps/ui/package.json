@@ -10,9 +10,10 @@
         "format": "biome format --write ."
     },
     "dependencies": {
+        "@stackframe/stack": "^2.8.22",
+        "next": "15.4.3",
         "react": "19.1.0",
-        "react-dom": "19.1.0",
-        "next": "15.4.3"
+        "react-dom": "19.1.0"
     },
     "devDependencies": {
         "typescript": "^5",
