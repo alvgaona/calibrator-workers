@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "@calibrator/tsconfig/base.json",
     "compilerOptions": {
         "lib": ["esnext"]
     },
