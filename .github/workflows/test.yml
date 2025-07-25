@@ -36,6 +36,10 @@ jobs:
 
       - name: build-all-workspaces
         run: bun run build
+        env:
+          NEXT_PUBLIC_STACK_PROJECT_ID: dummy-project-id
+          NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: dummy-publishable-key
+          STACK_SECRET_SERVER_KEY: dummy-secret-key
 
       - name: run-all-tests
         run: bun run test
