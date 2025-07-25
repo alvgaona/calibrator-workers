@@ -5,45 +5,76 @@
         "dev": {
             "cache": false,
             "persistent": true,
-            "dependsOn": ["^build"]
+            "dependsOn": [
+                "^build"
+            ]
         },
         "build": {
-            "dependsOn": ["^build"],
-            "outputs": ["dist/**", ".wrangler/**", "target/**"]
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": [
+                "dist/**",
+                ".wrangler/**",
+                "target/**",
+                ".next/**"
+            ],
+            "env": [
+                "!NEXT_PUBLIC_*",
+                "NEXT_PUBLIC_STACK_PROJECT_ID",
+                "NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY",
+                "STACK_SECRET_SERVER_KEY"
+            ]
         },
         "deploy": {
-            "dependsOn": ["build", "test", "lint"],
+            "dependsOn": [
+                "build",
+                "test",
+                "lint"
+            ],
             "cache": false
         },
         "test": {
-            "dependsOn": ["^build"]
+            "dependsOn": [
+                "^build"
+            ]
         },
         "test:watch": {
             "cache": false,
             "persistent": true
         },
         "lint": {
-            "dependsOn": ["^build"],
+            "dependsOn": [
+                "^build"
+            ],
             "outputs": []
         },
         "format": {
-            "dependsOn": ["^build"],
+            "dependsOn": [
+                "^build"
+            ],
             "outputs": []
         },
         "typecheck": {
-            "dependsOn": ["^build"],
+            "dependsOn": [
+                "^build"
+            ],
             "outputs": []
         },
         "clean": {
             "cache": false
         },
         "cf-typegen": {
-            "outputs": ["**/*.d.ts"]
+            "outputs": [
+                "**/*.d.ts"
+            ]
         },
         "start": {
             "cache": false,
             "persistent": true,
-            "dependsOn": ["^build"]
+            "dependsOn": [
+                "^build"
+            ]
         }
     },
     "globalDependencies": [
@@ -52,5 +83,7 @@
         "tsconfig.json",
         "biome.json"
     ],
-    "globalEnv": ["NODE_ENV"]
+    "globalEnv": [
+        "NODE_ENV"
+    ]
 }
