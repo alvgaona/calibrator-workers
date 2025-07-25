@@ -17,6 +17,10 @@ jobs:
   build:
     name: build-all-workspaces
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_STACK_PROJECT_ID: dummy-project-id
+      NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY: dummy-publishable-key
+      STACK_SECRET_SERVER_KEY: dummy-secret-key
     steps:
       - name: checkout-repository
         uses: actions/checkout@v4
