@@ -99,23 +99,21 @@ app.openapi(healthRoute, async (c) => {
 
 export default {
     fetch: app.fetch,
-    queue: async (batch: MessageBatch, _env: Env, _ctx: ExecutionContext) => {
+    queue: async (batch: MessageBatch, env: Env, _ctx: ExecutionContext) => {
         for (const message of batch.messages) {
             const messageBody = queueMessageSchema.parse(message.body);
 
-            console.log(messageBody);
+            const id = env.CALIBRATE.idFromName('foo');
+            const instance = env.CALIBRATE.get(id);
 
-            // const id = env.Calibrate.idFromName('foo');
-            // const instance = env.Calibrate.get(id);
-
-            // await instance.start({
-            //     envVars: {
-            //         R2_ACCESS_KEY: await env.R2_ACCESS_KEY_ID.get(),
-            //         R2_SECRET_ACCESS_KEY: await env.R2_SECRET_ACCESS_KEY.get(),
-            //         R2_BUCKET: env.R2_BUCKET,
-            //         R2_ENDPOINT_URL: env.R2_ENDPOINT_URL,
-            //     },
-            // });
+            await instance.start({
+                envVars: {
+                    R2_ACCESS_KEY: await env.R2_ACCESS_KEY_ID.get(),
+                    R2_SECRET_ACCESS_KEY: await env.R2_SECRET_ACCESS_KEY.get(),
+                    R2_BUCKET: env.R2_BUCKET,
+                    R2_ENDPOINT_URL: env.R2_ENDPOINT_URL,
+                },
+            });
         }
     },
 };
